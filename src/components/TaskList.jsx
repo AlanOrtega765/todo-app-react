@@ -1,7 +1,12 @@
 import { EditIcon } from './icons/EditIcon'
 import { DeleteIcon } from './icons/DeleteIcon'
 
-export const TaskList = ({ tasks, deleteTask, openEditModal, changeTaskState }) => {
+export const TaskList = ({
+  tasks,
+  deleteTask,
+  openEditModal,
+  changeTaskState
+}) => {
   const hasTasks = tasks.length > 0
 
   const onDeleteTask = (taskId) => {
@@ -13,29 +18,32 @@ export const TaskList = ({ tasks, deleteTask, openEditModal, changeTaskState }) 
     changeTaskState(task)
   }
 
-  return (
-    hasTasks
-      ? (
-        <ul className='list'>
-          {
-           tasks.map(task => (
-             <li key={task.id} className='list__item'>
-               <input type='checkbox' checked={task.completed} onChange={() => toggleCompleted(task)} />
-               <strong>{task.text}</strong>
+  const getTasksList = () => {
+    return (
+      <ul className='list'>
+        {tasks.map((task) => (
+          <li key={task.id} className='list__item'>
+            <input
+              type='checkbox'
+              checked={task.completed}
+              onChange={() => toggleCompleted(task)}
+            />
 
-               <div className='list__actions'>
-                 <button type='button' onClick={() => onEditTask(task)}>
-                   <EditIcon />
-                 </button>
-                 <button type='button' onClick={() => onDeleteTask(task.id)}>
-                   <DeleteIcon />
-                 </button>
-               </div>
-             </li>
-           ))
-          }
-        </ul>
-        )
-      : (<p className='no-tasks'>No hay tareas disponibles.</p>)
-  )
+            <strong>{task.text}</strong>
+
+            <div className='list__actions'>
+              <button type='button' onClick={() => onEditTask(task)}>
+                <EditIcon />
+              </button>
+              <button type='button' onClick={() => onDeleteTask(task.id)}>
+                <DeleteIcon />
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  return hasTasks ? getTasksList() : <p className='no-tasks'>No hay tareas disponibles.</p>
 }
