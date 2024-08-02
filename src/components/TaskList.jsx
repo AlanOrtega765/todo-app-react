@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import { EditIcon } from './icons/EditIcon'
 import { DeleteIcon } from './icons/DeleteIcon'
 
@@ -9,14 +10,11 @@ export const TaskList = ({
 }) => {
   const hasTasks = tasks.length > 0
 
-  const onDeleteTask = (taskId) => {
-    deleteTask(taskId)
-  }
+  const onDeleteTask = (taskId) => deleteTask(taskId)
+
   const onEditTask = (task) => openEditModal(task)
 
-  const toggleCompleted = (task) => {
-    changeTaskState(task)
-  }
+  const toggleCompleted = (task) => changeTaskState(task)
 
   const getTasksList = () => {
     return (
@@ -45,5 +43,9 @@ export const TaskList = ({
     )
   }
 
-  return hasTasks ? getTasksList() : <p className='no-tasks'>No hay tareas disponibles.</p>
+  return hasTasks ? (
+    getTasksList()
+  ) : (
+    <p className='no-tasks'>No hay tareas disponibles.</p>
+  )
 }

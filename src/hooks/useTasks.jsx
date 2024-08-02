@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState(() => {
@@ -14,65 +14,71 @@ export const useTasks = () => {
     setFilteredTasks(tasks)
   }, [tasks])
 
-  const addTask = (task) => {
-    setTasks([...tasks, task])
-  }
+  const addTask = (task) => setTasks([...tasks, task])
 
   const deleteTask = (taskId) => {
-    const newTasks = tasks.filter(task => task.id !== taskId)
+    const newTasks = tasks.filter((task) => task.id !== taskId)
     setTasks(newTasks)
   }
 
-  const openEditModal = (task) => {
-    setSelectedTask(task)
-  }
+  const openEditModal = (task) => setSelectedTask(task)
+  const closeModal = () => setSelectedTask(null)
 
   const updateTask = (editedTaskText) => {
-    setTasks(tasks.map(task => {
-      if (task.id === selectedTask.id) {
-        return {
-          ...task,
-          text: editedTaskText
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          return {
+            ...task,
+            text: editedTaskText
+          }
         }
-      }
 
-      return task
-    }))
-    setSelectedTask(null)
-  }
-
-  const closeModal = () => {
+        return task
+      })
+    )
     setSelectedTask(null)
   }
 
   const changeTaskState = (selectedTask) => {
     const newState = !selectedTask.completed
-    setTasks(tasks.map(task => {
-      if (task.id === selectedTask.id) {
-        return {
-          ...task,
-          completed: newState
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === selectedTask.id) {
+          return {
+            ...task,
+            completed: newState
+          }
         }
-      }
-      return task
-    }))
+        return task
+      })
+    )
   }
 
-  const filterTasks = (filter) => {
-    if (filter === 'all') {
-      setFilteredTasks(tasks)
-    }
+  const filterTasks = useCallback((filter) => {
+    if (filter === 'all') setFilteredTasks(tasks)
 
     if (filter === 'active') {
-      const newTasks = tasks.filter(task => task.completed === false)
+      const newTasks = tasks.filter((task) => task.completed === false)
       setFilteredTasks(newTasks)
     }
 
     if (filter === 'completed') {
-      const newTasks = tasks.filter(task => task.completed === true)
+      const newTasks = tasks.filter((task) => task.completed === true)
       setFilteredTasks(newTasks)
     }
-  }
+  }, [])
 
-  return { addTask, deleteTask, openEditModal, updateTask, closeModal, changeTaskState, tasks, filterTasks, filteredTasks, selectedTask }
+  return {
+    addTask,
+    deleteTask,
+    openEditModal,
+    updateTask,
+    closeModal,
+    changeTaskState,
+    tasks,
+    filterTasks,
+    filteredTasks,
+    selectedTask
+  }
 }

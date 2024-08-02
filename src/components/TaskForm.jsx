@@ -6,6 +6,9 @@ export const TaskForm = ({ addTask }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
+
+    if (inputValue === '') return
+
     const newTask = {
       id: crypto.randomUUID(),
       text: inputValue,
@@ -22,7 +25,13 @@ export const TaskForm = ({ addTask }) => {
 
   return (
     <form className='form' onSubmit={handleSubmit}>
-      <input className='form__input' type='text' placeholder='Agregar nueva tarea' value={inputValue} onChange={handleChange} />
+      <input
+        className='form__input'
+        type='text'
+        placeholder='Agregar nueva tarea'
+        value={inputValue}
+        onChange={handleChange}
+      />
       <button className='form__button' type='submit'>
         <PlusIcon />
       </button>
